@@ -2,7 +2,7 @@ import 'package:e_commerce_app/ui/pages/bottom_bar_pages/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../domain (constants)/app_routes.dart';
+import '../../domain(constants)/app_routes.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
