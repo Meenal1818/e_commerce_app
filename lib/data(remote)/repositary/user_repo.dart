@@ -19,7 +19,7 @@ class UserRepo{
         'mobile_number':mobNo,
         'email':email,
         'password':password
-      });
+      },isAuth: true);
     }catch (e){
       rethrow;
     }
@@ -32,7 +32,7 @@ Future<dynamic> loginUser({required String email,required String password})async
       mBodyParams: {
         'email':email,
         'password':password,
-      });
+      },isAuth: true);
     }catch (e){
       rethrow;
     }

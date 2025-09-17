@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../domain(constants)/app_routes.dart';
 
@@ -18,8 +19,16 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration (seconds: 3), (){
-      Navigator.pushReplacementNamed(context, AppRoutes.login);
+    Timer(Duration (seconds: 3), ()async{
+      String nextPage= AppRoutes.login;
+      SharedPreferences prefs=await SharedPreferences.getInstance();
+      String token=prefs.getString('token') ?? '';
+      print('token: $token');
+
+      if(token.isNotEmpty){
+      nextPage=AppRoutes.bottomBar;
+      }
+      Navigator.pushReplacementNamed(context, nextPage);
     });
   }
 

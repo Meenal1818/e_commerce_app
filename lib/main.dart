@@ -1,5 +1,9 @@
 import 'package:e_commerce_app/data(remote)/helper/api_helper.dart';
+import 'package:e_commerce_app/data(remote)/repositary/category_repo.dart';
+import 'package:e_commerce_app/data(remote)/repositary/product_repo.dart';
 import 'package:e_commerce_app/data(remote)/repositary/user_repo.dart';
+import 'package:e_commerce_app/ui/bloc/category/category_bloc.dart';
+import 'package:e_commerce_app/ui/bloc/product/product_bloc.dart';
 import 'package:e_commerce_app/ui/bloc/user/user_bloc.dart';
 import 'package:e_commerce_app/ui/pages/bottom_bar_pages/home_page.dart';
 import 'package:e_commerce_app/ui/pages/on_boarding_pages/splash_screen.dart';
@@ -10,7 +14,11 @@ import 'domain(constants)/app_routes.dart';
 
 void main() {
   runApp(MultiBlocProvider(providers: [
-    BlocProvider(create: (context) => UserBloc(userRepository: UserRepo(apiHelper: ApiHelper())),)
+    BlocProvider(create: (context) =>
+        UserBloc(userRepository: UserRepo(apiHelper: ApiHelper())),),
+    BlocProvider(create: (context) => ProductBloc(productRepo: ProductRepo(apiHelper: ApiHelper())),),
+    BlocProvider(create: (context) => CategoryBloc(categoryRepo: CategoryRepo(apiHelper: ApiHelper())),)
+
   ], child: MyApp()));
 }
 
@@ -21,14 +29,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        ),
         initialRoute: AppRoutes.splash,
         routes: AppRoutes.getRoutes(),
-      debugShowCheckedModeBanner: false,
-      home: SplashPage()
+        debugShowCheckedModeBanner: false,
+        home: SplashPage()
     );
   }
 }

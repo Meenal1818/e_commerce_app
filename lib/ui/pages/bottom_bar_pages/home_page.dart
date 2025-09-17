@@ -1,5 +1,17 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
+import 'package:e_commerce_app/domain(constants)/app_routes.dart';
+import 'package:e_commerce_app/ui/bloc/category/category_bloc.dart';
+import 'package:e_commerce_app/ui/bloc/category/category_event.dart';
+import 'package:e_commerce_app/ui/bloc/category/category_state.dart';
+import 'package:e_commerce_app/ui/custom_widgets/product_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../bloc/product/product_bloc.dart';
+import '../../bloc/product/product_event.dart';
+import '../../bloc/product/product_state.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,15 +28,20 @@ class _HomePageState extends State<HomePage> {
     'assets/app_image/banner4.jpg',
     'assets/app_image/banner6.jpg',
   ];
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
+  int _currentIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProductBloc>().add(FetchProductEvent());
+    context.read<CategoryBloc>().add(GetAllCategory());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 45, horizontal: 20),
+        child: SingleChildScrollView(
           child: Column(
             children: [
               Row(
@@ -58,7 +75,13 @@ class _HomePageState extends State<HomePage> {
                 ),
                 hintText: 'Search...',
                 leading: const Icon(CupertinoIcons.search, color: Colors.grey),
-                trailing: const [Icon(Icons.tune, color: Colors.black)],
+                trailing:  [
+                  Container(height: 25,
+                  width: 2,
+                  decoration: BoxDecoration(color: Colors.grey,
+                  borderRadius: BorderRadius.circular(10)),),
+                SizedBox(width: 13,),
+                Icon(Icons.tune, color: Colors.black)],
                 elevation: MaterialStatePropertyAll(0),
               ),
 
@@ -69,49 +92,61 @@ class _HomePageState extends State<HomePage> {
                 child: Stack(
                   alignment: Alignment.bottomCenter,
                   children: [
-                    PageView.builder(
-                      controller: _pageController,
-                      itemCount: bannerList.length,
-                      onPageChanged: (index) {
-                        setState(() {
-                          _currentPage = index;
-                        });
-                      },
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 15),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(bannerList[index]),
-                                fit: BoxFit.cover,
+                    CarouselSlider.builder(itemCount: bannerList.length,
+                        itemBuilder: (_, index, __) {
+                         return Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(bannerList[index]),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(15),
                               ),
-                              borderRadius: BorderRadius.circular(15),
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                          );
+                        },
+                        options: CarouselOptions(
+                          onPageChanged: (index,_){
+                            _currentIndex=index;
+                            setState(() {
+
+                            });
+                          },
+                          autoPlay: true,
+                          height: 200,
+                          viewportFraction: 1,
+                          autoPlayCurve:Curves.fastOutSlowIn,
+                          autoPlayInterval: Duration(seconds: 4)
+                        )),
 
                     Positioned(
                       bottom: 12,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(bannerList.length, (index) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 4),
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color:
-                                  _currentPage == index
-                                      ? Colors.white
-                                      : Colors.white54,
-                            ),
-                          );
-                        }),
-                      ),
+                      child: DotsIndicator(dotsCount: bannerList.length,
+                      position: _currentIndex.toDouble(),
+                      animate: true,
+                      decorator: DotsDecorator(
+                        activeSize: Size(18, 8),
+                        size: Size(8, 8),
+                        activeShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        color: Colors.transparent,
+                        activeColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(11),
+                          side: BorderSide(
+                            color: Colors.black,
+                            width: 1,
+                          ),
+                        ),
+                        spacing: EdgeInsets.only(
+                          right: 3,
+                          top: 11,
+                          bottom: 11,
+                        ),
+                      ),)
                     ),
                   ],
                 ),
@@ -121,41 +156,52 @@ class _HomePageState extends State<HomePage> {
 
               SizedBox(
                 height: 90,
-                child: ListView.builder(
-                  itemCount: 15,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Column(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.orange.shade400,
-                                radius: 30,
-                                child: Icon(
-                                  CupertinoIcons.bag_fill,
-                                  color: Colors.white,
-                                  size: 28,
-                                ),
-                              ),
+                child: BlocBuilder<CategoryBloc,CategoryState>(builder: (context, state) {
+                  if(state is CategoryLoadingState){
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if(state is CategoryErrorState){
+                    return Center(child: Text(state.errorMsg));
+                  }
+                  if(state is CategoryLoadedState){
+                    return ListView.builder(
+                      itemCount: state.mCategoryList.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Column(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Colors.orange.shade400,
+                                    radius: 30,
+                                    child: Icon(
+                                      CupertinoIcons.bag_fill,
+                                      color: Colors.white,
+                                      size: 28,
+                                    ),
+                                  ),
 
-                              Text(
-                                'Shoes',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                ),
+                                  Text(
+                                    state.mCategoryList[index].name!,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                      ],
+                            ),
+                          ],
+                        );
+                      },
                     );
-                  },
-                ),
+                  }
+                  return Container();
+                },)
               ),
 
               Row(
@@ -171,7 +217,9 @@ class _HomePageState extends State<HomePage> {
                   ),
 
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, AppRoutes.category);
+                    },
                     child: Text(
                       'See all',
                       style: TextStyle(
@@ -184,103 +232,48 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
 
-              Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,
-                    childAspectRatio: 3 / 4,
-                  ),
-                  itemCount: 20,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      padding: EdgeInsets.only(left: 10,bottom: 10),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(15),
+          Container(
+            margin: EdgeInsets.only(top: 10, bottom: 150),
+            width: double.infinity,
+            child: BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, state) {
+
+                  if(state is ProductLoadingState){
+                    return Center(child: CircularProgressIndicator(color: Colors.orange,),);
+                  }
+
+                  if(state is ProductErrorState){
+                    return Center(child: Text(state.errorMsg),);
+                  }
+
+                  if(state is ProductLoadedState){
+                    return GridView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                      SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 200,
+                        mainAxisSpacing: 11,
+                        crossAxisSpacing: 11,
+                        childAspectRatio: 8 / 9,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment. start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                height:30,
-                                width: 30,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(10)
-                                ),
-                                color: Colors.orange),
-                                child: Center(
-                                  child: IconButton(
-                                    padding: EdgeInsets.zero,
-                                      onPressed: (){},
-                                      icon: Icon(CupertinoIcons.heart,color: Colors.white,size: 20,)),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Center(
-                            child: Image.asset(
-                              'assets/app_image/logo.png',
-                              height: 80,
-                              width: 80,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-
-                          SizedBox(height: 15,),
-                          Text(
-                            'Wireless Headphones',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-
-                          SizedBox(height: 12,),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                '\$140.00',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-
-                              SizedBox(width: 15,),
-                              CircleAvatar(radius: 8,
-                              backgroundColor: Colors.grey,),
-                              SizedBox(width: 3,),
-                              CircleAvatar(radius: 8,
-                              backgroundColor: Colors.black,),
-                              SizedBox(width: 3,),
-                              CircleAvatar(radius: 8,
-                              backgroundColor: Colors.red,),
-                              SizedBox(width: 3,),
-                              CircleAvatar(radius: 8,
-                              backgroundColor: Colors.white,
-                              child: Center(child: Text('2',style: TextStyle(fontSize: 10,
-                              color: Colors.grey),)),)
-
-                            ],
-                          ),
-                        ],
-                      ),
+                      itemCount: state.mProductList.length,
+                      itemBuilder: (_, index) {
+                        return ProductCard(
+                          imgPath: state.mProductList[index].image!,
+                          name: state.mProductList[index].name!,
+                          price: state.mProductList[index].price!,
+                        );
+                      },
                     );
-                  },
-                ),
-              ),
-            ],
+                  }
+
+                  return Container();
+
+                }
+            ),
+          )],
           ),
         ),
       ),
