@@ -8,11 +8,16 @@ class ProductRepo {
 
   ProductRepo({required this.apiHelper});
 
-  Future<dynamic> fetchProducts() async {
+  Future<dynamic> fetchProducts({int? catId}) async {
     try {
-      return await apiHelper.postApi(url: AppUrls.fetchProductUrl);
+      final Map<String,dynamic> body = catId != null ? {"category_id": catId} : {};
+      return await apiHelper.postApi(
+        url: AppUrls.fetchProductUrl,
+        mBodyParams: body,
+      );
     } catch (e) {
       rethrow;
     }
   }
+
 }

@@ -13,7 +13,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(ProductLoadingState());
 
       try {
-        dynamic res = await productRepo.fetchProducts();
+        dynamic res = await productRepo.fetchProducts(catId: event.categoryId);
         if (res["status"]) {
           List<ProductModel> mProducts =
               ProductDataModel.fromJson(res).data ?? [];

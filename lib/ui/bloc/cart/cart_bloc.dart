@@ -1,0 +1,23 @@
+import 'package:e_commerce_app/data(remote)/repositary/cart_repo.dart';
+import 'package:e_commerce_app/ui/bloc/cart/cart_event.dart';
+import 'package:e_commerce_app/ui/bloc/cart/cart_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class CartBloc extends Bloc<CartEvent,CartState>{
+  CartRepo cartRepo;
+  CartBloc({required this.cartRepo}) : super(CartInitialState()){
+    on<AddToCart>((event,emit)async{
+      emit(CartLoadingState());
+      try{
+        dynamic res =await cartRepo.addProductIntoCart(productId: event.productId, qty: event.qty);
+        if(res['status']=='true'|| res['status']){
+          emit(CartSuccessState());
+        }else{
+          emit(CartFailureState(errorMsg: res['message']));
+        }
+      }catch (e){
+        emit(CartFailureState(errorMsg: e.toString()));
+      }
+    });
+  }
+}

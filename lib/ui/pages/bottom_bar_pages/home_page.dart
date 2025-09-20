@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 20),
 
               SizedBox(
-                height: 90,
+                height: 115,
                 child: BlocBuilder<CategoryBloc,CategoryState>(builder: (context, state) {
                   if(state is CategoryLoadingState){
                     return Center(child: CircularProgressIndicator());
@@ -168,28 +168,44 @@ class _HomePageState extends State<HomePage> {
                       itemCount: state.mCategoryList.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
+                        int categoryId= int.parse(state.mCategoryList[index].id!);
+                        String categoryName= state.mCategoryList[index].name!;
                         return Row(
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(right: 10),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  CircleAvatar(
-                                    backgroundColor: Colors.orange.shade400,
-                                    radius: 30,
-                                    child: Icon(
-                                      CupertinoIcons.bag_fill,
-                                      color: Colors.white,
-                                      size: 28,
+                                  InkWell(
+                                    onTap: (){
+                                      Navigator.pushNamed(context, AppRoutes.category,arguments:[categoryId,categoryName]);
+                                    },
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.orange.shade400,
+                                      radius: 30,
+                                      child: Icon(
+                                        CupertinoIcons.bag_fill,
+                                        color: Colors.white,
+                                        size: 28,
+                                      ),
                                     ),
                                   ),
 
-                                  Text(
-                                    state.mCategoryList[index].name!,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15,
+                                  SizedBox(
+                                    width: 70,
+                                    child: Center(
+                                      child: Text(
+                                        state.mCategoryList[index].name!,
+                                        style: TextStyle(
+                                          overflow:TextOverflow.ellipsis,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                        ),
+                                        maxLines: 2,
+                                        softWrap: true,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -261,6 +277,9 @@ class _HomePageState extends State<HomePage> {
                       itemCount: state.mProductList.length,
                       itemBuilder: (_, index) {
                         return ProductCard(
+                          onTap: (){
+                            Navigator.pushNamed(context, AppRoutes.details,arguments: state.mProductList[index]);
+                          },
                           imgPath: state.mProductList[index].image!,
                           name: state.mProductList[index].name!,
                           price: state.mProductList[index].price!,

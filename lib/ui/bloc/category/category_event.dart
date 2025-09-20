@@ -1,3 +1,4 @@
 abstract class CategoryEvent{}
 
-class GetAllCategory extends CategoryEvent{}
+class GetAllCategory extends CategoryEvent{
+}

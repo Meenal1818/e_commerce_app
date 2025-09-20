@@ -1,7 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:e_commerce_app/ui/bloc/cart/cart_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../data(remote)/model/product_model.dart';
+import '../../bloc/cart/cart_bloc.dart';
+import '../../bloc/cart/cart_state.dart';
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key});
@@ -14,6 +20,7 @@ class _DetailsPageState extends State<DetailsPage> {
   int _currentIndex = 0;
   int selectedIndex = 0;
   int pageViewIndex = 0;
+  bool isLoading=false;
   final PageController _pageController = PageController();
 
   final tabs = ["Description", "Specifications", "Reviews"];
@@ -30,6 +37,8 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+    ModalRoute.of(context)?.settings.arguments as ProductModel;
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: Stack(
@@ -49,12 +58,13 @@ class _DetailsPageState extends State<DetailsPage> {
                             return Container(
                               decoration: BoxDecoration(
                                 color: Colors.grey.shade200,
-                                image: DecorationImage(
-                                  image: AssetImage('assets/app_image/logo.png'),
-                                  fit: BoxFit.contain,
-                                ),
+                                // image: DecorationImage(
+                                //   image: NetworkImage(args.image!),
+                                //   fit: BoxFit.none,
+                                // ),
                                 borderRadius: BorderRadius.circular(15),
                               ),
+                              child: Image.network(args.image!,height: 250,width: 250,fit: BoxFit.contain,),
                             );
                           },
                           options: CarouselOptions(
@@ -165,9 +175,15 @@ class _DetailsPageState extends State<DetailsPage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Wireless Headphone\n\$520.00',style: TextStyle(
-                                  color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold
-                                ),),
+                                SizedBox(
+                                  width: 150,
+                                  child: Text('${args.name}\n₹${args.price}',style: TextStyle(
+                                    color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold
+                                  ),
+                                  softWrap: true,
+                                  maxLines: 3,
+                                  overflow:TextOverflow.ellipsis,),
+                                ),
                                 SizedBox(height: 8,),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -439,22 +455,70 @@ class _DetailsPageState extends State<DetailsPage> {
                     SizedBox(
                       height: 60,
                       width: 200,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                        ),
-                        onPressed: () {},
-                        child: const Text(
-                          "Add to Cart",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
-                          ),
-                        ),
+                      child:   BlocConsumer<CartBloc, CartState>(
+                        listener: (_, state) {
+                          if (state is CartLoadingState) {
+                            isLoading = true;
+                          }
+
+                          if (state is CartFailureState) {
+                            isLoading = false;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("${state.errorMsg}"),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+
+                          if (state is CartSuccessState) {
+                            isLoading = false;
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Item added to cart successfully"),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          }
+                        }, builder: (context,state) {
+                          return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                            ),
+                            onPressed: () {
+                              context.read<CartBloc>().add(
+                                AddToCart(
+                                  productId: int.parse(args.id),
+                                  qty: quantity,
+                                ),
+                              );
+                            },
+                            child: isLoading ? Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Text("Adding..."),
+                              ],
+                            ) : Text(
+                              "Add To Cart",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+                      },
+
                       ),
                     ),
                   ],

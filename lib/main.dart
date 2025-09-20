@@ -1,7 +1,9 @@
 import 'package:e_commerce_app/data(remote)/helper/api_helper.dart';
+import 'package:e_commerce_app/data(remote)/repositary/cart_repo.dart';
 import 'package:e_commerce_app/data(remote)/repositary/category_repo.dart';
 import 'package:e_commerce_app/data(remote)/repositary/product_repo.dart';
 import 'package:e_commerce_app/data(remote)/repositary/user_repo.dart';
+import 'package:e_commerce_app/ui/bloc/cart/cart_bloc.dart';
 import 'package:e_commerce_app/ui/bloc/category/category_bloc.dart';
 import 'package:e_commerce_app/ui/bloc/product/product_bloc.dart';
 import 'package:e_commerce_app/ui/bloc/user/user_bloc.dart';
@@ -13,13 +15,30 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'domain(constants)/app_routes.dart';
 
 void main() {
-  runApp(MultiBlocProvider(providers: [
-    BlocProvider(create: (context) =>
-        UserBloc(userRepository: UserRepo(apiHelper: ApiHelper())),),
-    BlocProvider(create: (context) => ProductBloc(productRepo: ProductRepo(apiHelper: ApiHelper())),),
-    BlocProvider(create: (context) => CategoryBloc(categoryRepo: CategoryRepo(apiHelper: ApiHelper())),)
-
-  ], child: MyApp()));
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create:
+              (context) =>
+                  UserBloc(userRepository: UserRepo(apiHelper: ApiHelper())),
+        ),
+        BlocProvider(
+          create:
+              (context) =>
+                  ProductBloc(productRepo: ProductRepo(apiHelper: ApiHelper())),
+        ),
+        BlocProvider(
+          create:
+              (context) => CategoryBloc(
+                categoryRepo: CategoryRepo(apiHelper: ApiHelper()),
+              ),
+        ),
+        BlocProvider(create: (context) => CartBloc(cartRepo: CartRepo(apiHelper: ApiHelper())),)
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -29,16 +48,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        ),
-        initialRoute: AppRoutes.splash,
-        routes: AppRoutes.getRoutes(),
-        debugShowCheckedModeBanner: false,
-        home: SplashPage()
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
+      initialRoute: AppRoutes.splash,
+      routes: AppRoutes.getRoutes(),
+      debugShowCheckedModeBanner: false,
+      home: SplashPage(),
     );
   }
 }
-
-

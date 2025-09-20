@@ -28,12 +28,12 @@ class ProductDataModel {
 }
 
 class ProductModel {
-  String? id;
+  dynamic id;
   String? name;
   String? price;
   String? image;
-  String? categoryId;
-  String? status;
+  dynamic categoryId;
+  dynamic status;
   String? createdAt;
   String? updatedAt;
 

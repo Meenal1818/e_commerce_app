@@ -5,4 +5,5 @@ class AppUrls{
   static const String loginUrl='${baseUrl}user/login';
   static const String fetchProductUrl='${baseUrl}products';
   static const String fetchCategoryUrl='${baseUrl}categories';
+  static const String addToCartUrl='${baseUrl}add-to-cart';
 }
