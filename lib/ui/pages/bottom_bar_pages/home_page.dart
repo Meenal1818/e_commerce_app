@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
     'assets/app_image/banner6.jpg',
   ];
   int _currentIndex = 0;
+  bool isBuild=true;
   @override
   void initState() {
     super.initState();
@@ -156,7 +157,8 @@ class _HomePageState extends State<HomePage> {
 
               SizedBox(
                 height: 115,
-                child: BlocBuilder<CategoryBloc,CategoryState>(builder: (context, state) {
+                child: BlocBuilder<CategoryBloc,CategoryState>(
+                  builder: (context, state) {
                   if(state is CategoryLoadingState){
                     return Center(child: CircularProgressIndicator());
                   }
@@ -164,7 +166,8 @@ class _HomePageState extends State<HomePage> {
                     return Center(child: Text(state.errorMsg));
                   }
                   if(state is CategoryLoadedState){
-                    return ListView.builder(
+                    return state.mCategoryList.isNotEmpty?
+                    ListView.builder(
                       itemCount: state.mCategoryList.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
@@ -179,6 +182,7 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   InkWell(
                                     onTap: (){
+                                      isBuild=false;
                                       Navigator.pushNamed(context, AppRoutes.category,arguments:[categoryId,categoryName]);
                                     },
                                     child: CircleAvatar(
@@ -214,7 +218,8 @@ class _HomePageState extends State<HomePage> {
                           ],
                         );
                       },
-                    );
+                    ):
+                    Center(child: Text('No Categories Found.'),);
                   }
                   return Container();
                 },)
@@ -252,6 +257,9 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.only(top: 10, bottom: 150),
             width: double.infinity,
             child: BlocBuilder<ProductBloc, ProductState>(
+                buildWhen: (ps,cs){
+                  return isBuild;
+                },
                 builder: (context, state) {
 
                   if(state is ProductLoadingState){
@@ -263,7 +271,8 @@ class _HomePageState extends State<HomePage> {
                   }
 
                   if(state is ProductLoadedState){
-                    return GridView.builder(
+                    return state.mProductList.isNotEmpty?
+                    GridView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
                       physics: NeverScrollableScrollPhysics(),
@@ -282,10 +291,11 @@ class _HomePageState extends State<HomePage> {
                           },
                           imgPath: state.mProductList[index].image!,
                           name: state.mProductList[index].name!,
-                          price: state.mProductList[index].price!,
+                          price: '₹${state.mProductList[index].price!}',
                         );
                       },
-                    );
+                    ):
+                    Center(child: Text('No Data Found.'));
                   }
 
                   return Container();

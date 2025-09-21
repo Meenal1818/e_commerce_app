@@ -74,9 +74,7 @@ class _BottomBarState extends State<BottomBar> {
 
             IconButton(
               onPressed: () {
-                _selectedIndex = 3;
                 Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(),));
-                setState(() {});
               },
               icon: Icon(
                 _selectedIndex == 3
