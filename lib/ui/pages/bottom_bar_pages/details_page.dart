@@ -465,7 +465,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             isLoading = false;
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text("${state.errorMsg}"),
+                                content: Text(state.errorMsg),
                                 backgroundColor: Colors.red,
                               ),
                             );

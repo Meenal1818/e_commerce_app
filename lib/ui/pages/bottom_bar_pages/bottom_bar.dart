@@ -1,5 +1,6 @@
 import 'package:e_commerce_app/ui/pages/bottom_bar_pages/cart_page.dart';
 import 'package:e_commerce_app/ui/pages/bottom_bar_pages/home_page.dart';
+import 'package:e_commerce_app/ui/pages/bottom_bar_pages/profile/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,13 +18,14 @@ class _BottomBarState extends State<BottomBar> {
     Center(child: Text('Widget Page')),
     Center(child: Text('Notification Page')),
     HomePage(),
-    CartPage(),
-    Center(child: Text('Profile Page')),
+    Center(child: Text('Cart Page')),
+    ProfilePage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       extendBody: true,
       body: _pages[_selectedIndex],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
