@@ -5,3 +5,4 @@ class CreateOrder extends OrderEvent{
   int status;
   CreateOrder({required this.productId,required this.status});
 }
+class FetchOrders extends OrderEvent{}

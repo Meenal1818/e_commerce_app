@@ -13,4 +13,12 @@ class OrderRepo{
       rethrow;
     }
   }
+  
+  Future<dynamic> fetchOrders()async{
+    try{
+      return await apiHelper.getApi(url: AppUrls.getOrderUrl);
+    }catch (e){
+      rethrow;
+    }
+  }
 }

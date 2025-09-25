@@ -506,7 +506,12 @@ class _DetailsPageState extends State<DetailsPage> {
                                   ),
                                 ),
                                 SizedBox(width: 10),
-                                Text("Adding..."),
+                                Text("Adding...",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),),
                               ],
                             ) : Text(
                               "Add To Cart",

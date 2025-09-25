@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/domain(constants)/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -67,7 +68,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     leading: const Icon(CupertinoIcons.cube_box_fill),
                     title: const Text('My Orders'),
                     trailing:  Icon(Icons.arrow_forward_ios,size: 25,),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.myOrders);
+                    },
                   ),
 
                 ],

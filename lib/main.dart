@@ -59,7 +59,6 @@ class MyApp extends StatelessWidget {
       initialRoute: AppRoutes.splash,
       routes: AppRoutes.getRoutes(),
       debugShowCheckedModeBanner: false,
-      home: SplashPage(),
     );
   }
 }

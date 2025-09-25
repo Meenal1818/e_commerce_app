@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data(remote)/model/cart_model.dart';
+import '../../../domain(constants)/app_routes.dart';
 import '../../bloc/cart/cart_state.dart';
 
 class CartPage extends StatefulWidget {
@@ -184,16 +185,12 @@ class _CartPageState extends State<CartPage> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                if (quantity > 1) {
-                                                  setState(() => quantity--);
-                                                }
-                                              },
-                                              child: const Icon(
-                                                Icons.remove,
-                                                size: 18,
-                                                color: Colors.black,
+                                            Text(
+                                              'Items:',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey,
                                               ),
                                             ),
                                             Text(
@@ -204,16 +201,7 @@ class _CartPageState extends State<CartPage> {
                                                 color: Colors.black,
                                               ),
                                             ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                setState(() => quantity++);
-                                              },
-                                              child: const Icon(
-                                                Icons.add,
-                                                size: 18,
-                                                color: Colors.black,
-                                              ),
-                                            ),
+
                                           ],
                                         ),
                                       ),
@@ -406,10 +394,12 @@ class _CartPageState extends State<CartPage> {
           title: Text("Confirm Order"),
           content: Text("Are you sure you want to place this order?"),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: Text("Cancel"),
-            ),
+            ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+        },
+        child: Text("Cancel",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16),),
+        ),
             BlocConsumer<OrderBloc, OrderState>(
               listener: (ctx, state) {
                 if (state is OrderFailureState) {
@@ -425,13 +415,15 @@ class _CartPageState extends State<CartPage> {
                 }
                 if (state is OrderSuccessState) {
                   Navigator.pop(dialogContext);
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text("Order Placed Successfully!"),
                       backgroundColor: Colors.green,
                     ),
                   );
-                  print(state.toString());
+
+
 
                 }
               },
@@ -444,10 +436,9 @@ class _CartPageState extends State<CartPage> {
                         status: 1
                       ));
                     }
-                    context.read<CartBloc>().add(FetchCart());
 
                   },
-                  child: Text("OK"),
+                  child: Text("OK",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16),),
                 );
               },
             ),
