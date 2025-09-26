@@ -132,7 +132,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                                           product.image,
                                           height: 60,
                                           width: 60,
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.contain,
                                         ),
                                       ),
                                       title: Text(

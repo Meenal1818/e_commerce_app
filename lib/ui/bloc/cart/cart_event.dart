@@ -8,6 +8,12 @@ class AddToCart extends CartEvent{
 
 class FetchCart extends CartEvent{}
 
+class IncDecCartItem extends CartEvent{
+  int productId;
+  int qty;
+  IncDecCartItem({required this.productId,required this.qty});
+}
+
 class DeleteCartItem extends CartEvent{
   int id;
   DeleteCartItem({required this.id});

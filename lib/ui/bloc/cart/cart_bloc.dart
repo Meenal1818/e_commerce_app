@@ -38,6 +38,30 @@ class CartBloc extends Bloc<CartEvent,CartState>{
       }
     });
 
+    on<IncDecCartItem>((event, emit) async {
+      emit(CartLoadingState());
+      try {
+        dynamic res = await cartRepo.incDecCartItem(
+          productId: event.productId,
+          qty: event.qty,
+        );
+
+        if (res['status'] == 'true' || res['status']) {
+          // fetch updated cart after increment/decrement
+          final updatedCart = await cartRepo.fetchCartProduct();
+          CartDataModel dataModel = CartDataModel.fromJson(updatedCart);
+          List<CartModel> cartItemList = dataModel.data ?? [];
+          emit(CartSuccessState(cartItems: cartItemList));
+        } else {
+          emit(CartFailureState(errorMsg: res['message']));
+        }
+      } catch (e) {
+        emit(CartFailureState(errorMsg: e.toString()));
+      }
+    });
+
+
+
     on<DeleteCartItem>((event,emit)async{
       emit(CartInitialState());
 

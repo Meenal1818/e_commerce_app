@@ -188,6 +188,7 @@ class _CartPageState extends State<CartPage> {
                                             size: 20,
                                           ),
                                         ),
+
                                         Container(
                                           width: 80,
                                           height: 36,
@@ -198,8 +199,7 @@ class _CartPageState extends State<CartPage> {
                                             ),
                                           ),
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Text(
                                                 'Items:',
@@ -209,6 +209,7 @@ class _CartPageState extends State<CartPage> {
                                                   color: Colors.grey,
                                                 ),
                                               ),
+                                              // Quantity display
                                               Text(
                                                 item.quantity.toString(),
                                                 style: const TextStyle(
@@ -217,9 +218,63 @@ class _CartPageState extends State<CartPage> {
                                                   color: Colors.black,
                                                 ),
                                               ),
+
                                             ],
                                           ),
+
                                         ),
+                                        // Container(
+                                        //   width: 105,
+                                        //   height: 36,
+                                        //   decoration: BoxDecoration(
+                                        //     color: Colors.grey.shade200,
+                                        //     borderRadius: BorderRadius.circular(
+                                        //       50,
+                                        //     ),
+                                        //   ),
+                                        //   child: Row(
+                                        //     children: [
+                                        //       // Decrement button
+                                        //       IconButton(
+                                        //         onPressed: () {
+                                        //            // quantity 1 se kam na ho
+                                        //             context.read<CartBloc>().add(
+                                        //               IncDecCartItem(
+                                        //                 productId: item.productId,
+                                        //                 qty: item.quantity - 1,
+                                        //               ),
+                                        //             );
+                                        //         },
+                                        //         icon: const Icon(Icons.remove, size: 20),
+                                        //       ),
+                                        //
+                                        //       // Quantity display
+                                        //       Text(
+                                        //         item.quantity.toString(),
+                                        //         style: const TextStyle(
+                                        //           fontSize: 14,
+                                        //           fontWeight: FontWeight.bold,
+                                        //           color: Colors.black,
+                                        //         ),
+                                        //       ),
+                                        //
+                                        //       // Increment button
+                                        //       IconButton(
+                                        //         onPressed: () {
+                                        //           context.read<CartBloc>().add(
+                                        //             IncDecCartItem(
+                                        //               productId: item.productId,
+                                        //               qty: item.quantity + 1,
+                                        //             ),
+                                        //           );
+                                        //
+                                        //         },
+                                        //         icon: const Icon(Icons.add, size: 20),
+                                        //       ),
+                                        //     ],
+                                        //   ),
+                                        //
+                                        // ),
                                       ],
                                     ),
                                   ],

@@ -21,6 +21,15 @@ class CartRepo{
     }
   }
 
+  Future<dynamic> incDecCartItem ({required int productId , required int qty})async{
+    try{
+      return await apiHelper.postApi(url: AppUrls.incDecCartUrl,
+          mBodyParams:{'product_id':productId,'quantity':qty} );
+    }catch (e){
+      rethrow;
+    }
+  }
+
   Future<dynamic> deleteCartItem({required int cartId})async{
     try{
       return await apiHelper.postApi(url: AppUrls.deleteCartUrl,
