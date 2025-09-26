@@ -9,4 +9,5 @@ class AppUrls{
   static const String fetchCartUrl='${baseUrl}product/view-cart';
   static const String createOrderUrl='${baseUrl}product/create-order';
   static const String getOrderUrl='${baseUrl}product/get-order';
+  static const String deleteCartUrl='${baseUrl}product/delete-cart';
 }

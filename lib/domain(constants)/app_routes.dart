@@ -1,15 +1,15 @@
 
 
-import 'package:e_commerce_app/ui/pages/bottom_bar_pages/category_page.dart';
-import 'package:e_commerce_app/ui/pages/bottom_bar_pages/details_page.dart';
+import 'package:e_commerce_app/ui/pages/bottom_bar_pages/category/category_page.dart';
+import 'package:e_commerce_app/ui/pages/bottom_bar_pages/detail/details_page.dart';
 import 'package:e_commerce_app/ui/pages/bottom_bar_pages/profile/my_orders_page.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../ui/pages/bottom_bar_pages/bottom_bar.dart';
-import '../ui/pages/bottom_bar_pages/home_page.dart';
+import '../ui/pages/bottom_bar_pages/home/home_page.dart';
 import '../ui/pages/on_boarding_pages/login_page.dart';
 import '../ui/pages/on_boarding_pages/sign_up_page.dart';
-import '../ui/pages/on_boarding_pages/splash_screen.dart';
+import '../ui/pages/on_boarding_pages/splash_page.dart';
 
 class AppRoutes{
 

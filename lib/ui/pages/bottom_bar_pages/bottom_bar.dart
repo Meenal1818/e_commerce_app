@@ -1,5 +1,5 @@
-import 'package:e_commerce_app/ui/pages/bottom_bar_pages/cart_page.dart';
-import 'package:e_commerce_app/ui/pages/bottom_bar_pages/home_page.dart';
+import 'package:e_commerce_app/ui/pages/bottom_bar_pages/cart/cart_page.dart';
+import 'package:e_commerce_app/ui/pages/bottom_bar_pages/home/home_page.dart';
 import 'package:e_commerce_app/ui/pages/bottom_bar_pages/profile/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

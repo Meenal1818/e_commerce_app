@@ -9,8 +9,8 @@ import 'package:e_commerce_app/ui/bloc/category/category_bloc.dart';
 import 'package:e_commerce_app/ui/bloc/order/order_bloc.dart';
 import 'package:e_commerce_app/ui/bloc/product/product_bloc.dart';
 import 'package:e_commerce_app/ui/bloc/user/user_bloc.dart';
-import 'package:e_commerce_app/ui/pages/bottom_bar_pages/home_page.dart';
-import 'package:e_commerce_app/ui/pages/on_boarding_pages/splash_screen.dart';
+import 'package:e_commerce_app/ui/pages/bottom_bar_pages/home/home_page.dart';
+import 'package:e_commerce_app/ui/pages/on_boarding_pages/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

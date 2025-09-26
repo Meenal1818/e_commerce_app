@@ -37,5 +37,23 @@ class CartBloc extends Bloc<CartEvent,CartState>{
         emit(CartFailureState(errorMsg: e.toString()));
       }
     });
+
+    on<DeleteCartItem>((event,emit)async{
+      emit(CartInitialState());
+
+      try{
+        dynamic res =await cartRepo.deleteCartItem(cartId: event.id);
+        if(res['status']=='true' || res['status']){
+          final updatedCart= await cartRepo.fetchCartProduct();
+          CartDataModel dataModel=CartDataModel.fromJson(updatedCart);
+          List<CartModel> cartItemList= dataModel.data ?? [];
+          emit(CartSuccessState(cartItems: cartItemList));
+        }else{
+          emit(CartFailureState(errorMsg: res['message']));
+        }
+      }catch (e){
+        emit(CartFailureState(errorMsg: e.toString()));
+      }
+    });
   }
 }

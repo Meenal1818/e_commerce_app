@@ -7,3 +7,8 @@ class AddToCart extends CartEvent{
 }
 
 class FetchCart extends CartEvent{}
+
+class DeleteCartItem extends CartEvent{
+  int id;
+  DeleteCartItem({required this.id});
+}
