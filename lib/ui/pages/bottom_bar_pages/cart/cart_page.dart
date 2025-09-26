@@ -6,6 +6,7 @@ import 'package:e_commerce_app/ui/bloc/order/order_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../data(remote)/model/cart_model.dart';
 import '../../../../domain(constants)/app_routes.dart';
@@ -20,6 +21,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   TextEditingController couponController = TextEditingController();
+  bool showCouponAnimation = false;
   Map<String, dynamic>? appliedCoupon;
   double discount = 0.0;
   List<Map<String, dynamic>> couponList = [
@@ -86,7 +88,15 @@ class _CartPageState extends State<CartPage> {
                   }
 
                   if (state is CartFailureState) {
-                    return Center(child: Text(state.errorMsg));
+                    // return Center(child: Text(state.errorMsg));
+                    return Center(
+                      child: Lottie.asset(
+                        'assets/lottie/empty_cart.json', // put your Lottie file in assets
+                        width: 250,
+                        height: 250,
+                        repeat: false,
+                      ),
+                    );
                   }
 
                   if (state is CartSuccessState) {
@@ -283,7 +293,17 @@ class _CartPageState extends State<CartPage> {
                             );
                           },
                         )
-                        : Center(child: Text("No items in the cart"));
+                        : Container(
+                      color: Colors.transparent, // optional semi-transparent overlay
+                      child: Center(
+                        child: Lottie.asset(
+                          'assets/lottie/empty_cart.json', // put your Lottie file in assets
+                          width: 250,
+                          height: 250,
+                          repeat: false,
+                        ),
+                      ),
+                    );
                   }
 
                   return Container();
@@ -338,218 +358,244 @@ class _CartPageState extends State<CartPage> {
                   double total = subtotal - discount;
                   if (total < 0) total = 0;
 
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  return Stack(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          SizedBox(
-                            height: 50,
-                            width: 350,
-                            child: TextField(
-                              keyboardType: TextInputType.text,
-                              controller: couponController,
-                              decoration: InputDecoration(
-                                suffixIcon: Padding(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      String enteredCode = couponController.text.trim().toLowerCase();
-                                      final foundCoupon = couponList.firstWhere(
-                                            (c) => c['code'].toString().toLowerCase() == enteredCode,
-                                        orElse: () => {},
-                                      );
-
-                                      if (foundCoupon.isNotEmpty) {
-                                        // check minPrice condition
-                                        double subtotal = 0.0;
-                                        final cartState = context.read<CartBloc>().state;
-                                        if (cartState is CartSuccessState && cartState.cartItems != null) {
-                                          for (var item in cartState.cartItems!) {
-                                            subtotal +=
-                                                (double.tryParse(item.price.toString()) ?? 0) * (item.quantity ?? 1);
-                                          }
-                                        }
-
-                                        if (subtotal >= (foundCoupon['minPrice'] ?? 0)) {
-                                          // valid coupon (subtotal >= minPrice)
-                                          setState(() {
-                                            appliedCoupon = foundCoupon;
-                                          });
-
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text("Coupon Applied: ${foundCoupon['code']}"),
-                                              backgroundColor: Colors.green,
-                                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 50,
+                                width: 350,
+                                child: TextField(
+                                  keyboardType: TextInputType.text,
+                                  controller: couponController,
+                                  decoration: InputDecoration(
+                                    suffixIcon: Padding(
+                                      padding: const EdgeInsets.only(right: 8),
+                                      child: TextButton(
+                                        onPressed: () {
+                                          FocusScope.of(context).unfocus();
+                                          String enteredCode = couponController.text.trim().toLowerCase();
+                                          final foundCoupon = couponList.firstWhere(
+                                                (c) => c['code'].toString().toLowerCase() == enteredCode,
+                                            orElse: () => {},
                                           );
-                                        } else {
-                                          //subtotal kam hai
-                                          setState(() {
-                                            appliedCoupon = null;
-                                          });
 
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                "This coupon requires a minimum order of ₹${foundCoupon['minPrice']}",
+                                          if (foundCoupon.isNotEmpty) {
+                                            // check minPrice condition
+                                            double subtotal = 0.0;
+                                            final cartState = context.read<CartBloc>().state;
+                                            if (cartState is CartSuccessState && cartState.cartItems != null) {
+                                              for (var item in cartState.cartItems!) {
+                                                subtotal +=
+                                                    (double.tryParse(item.price.toString()) ?? 0) * (item.quantity ?? 1);
+                                              }
+                                            }
+
+                                            if (subtotal >= (foundCoupon['minPrice'] ?? 0)) {
+                                              // valid coupon (subtotal >= minPrice)
+                                              setState(() {
+                                                appliedCoupon = foundCoupon;
+                                                showCouponAnimation=true;
+                                              });
+
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                  content: Text("Coupon Applied: ${foundCoupon['code']}"),
+                                                  backgroundColor: Colors.green,
+                                                ),
+                                              );
+
+                                              Future.delayed(Duration(seconds: 3),(){
+                                                setState(() {
+                                                  showCouponAnimation=false;
+                                                });
+                                              });
+                                            } else {
+                                              //minimum price is less
+                                              setState(() {
+                                                appliedCoupon = null;
+                                              });
+
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    "This coupon requires a minimum order of ₹${foundCoupon['minPrice']}",
+                                                  ),
+                                                  backgroundColor: Colors.orange,
+                                                ),
+                                              );
+                                            }
+                                          } else {
+                                            // invalid coupon code
+                                            setState(() {
+                                              appliedCoupon = null;
+                                            });
+
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(
+                                                content: Text("Invalid Coupon Code"),
+                                                backgroundColor: Colors.red,
                                               ),
-                                              backgroundColor: Colors.orange,
-                                            ),
-                                          );
-                                        }
-                                      } else {
-                                        // invalid coupon code
-                                        setState(() {
-                                          appliedCoupon = null;
-                                        });
+                                            );
+                                          }
+                                        },
 
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
-                                            content: Text("Invalid Coupon Code"),
-                                            backgroundColor: Colors.red,
+
+                                        child: const Text(
+                                          'Apply',
+                                          style: TextStyle(
+                                            color: Colors.orange,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                        );
-                                      }
-                                    },
-
-
-                                    child: const Text(
-                                      'Apply',
-                                      style: TextStyle(
-                                        color: Colors.orange,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                        ),
                                       ),
+                                    ),
+                                    hintText: 'Enter Discount Code',
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    fillColor: Colors.grey.shade200,
+                                    filled: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 17,
+                                      vertical: 14,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                      borderSide: BorderSide.none,
                                     ),
                                   ),
                                 ),
-                                hintText: 'Enter Discount Code',
-                                hintStyle: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 14,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+
+                          // Subtotal (actual product total)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Subtotal",
+                                style: TextStyle(fontSize: 18, color: Colors.grey),
+                              ),
+                              Text(
+                                "₹${subtotal.toStringAsFixed(2)}", // ✅ actual total
+                                style: const TextStyle(
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                fillColor: Colors.grey.shade200,
-                                filled: true,
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 17,
-                                  vertical: 14,
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(height: 10,),
+
+                          // Discount (if any)
+                          if (discount > 0)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "Discount",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.green,
+                                  ),
                                 ),
-                                border: OutlineInputBorder(
+                                Text(
+                                  "-₹${discount.toStringAsFixed(2)}",
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                          const Divider(),
+
+                          // Total after discount
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Total:",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                "₹${total.toStringAsFixed(2)}",
+                                // ✅ final total after discount
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          // ✅ Checkout Button
+                          SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.orange,
+                                shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide.none,
+                                ),
+                              ),
+                              onPressed: () {
+                                final cartState = context.read<CartBloc>().state;
+                                if (cartState is CartSuccessState &&
+                                    cartState.cartItems!.isNotEmpty) {
+                                  showConfirmOrderDialog(
+                                    context,
+                                    cartState.cartItems!,
+                                  );
+                                }
+                              },
+
+                              child: const Text(
+                                "Checkout",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 15),
 
-                      // Subtotal (actual product total)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Subtotal",
-                            style: TextStyle(fontSize: 18, color: Colors.grey),
-                          ),
-                          Text(
-                            "₹${subtotal.toStringAsFixed(2)}", // ✅ actual total
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: 10,),
-
-                      // Discount (if any)
-                      if (discount > 0)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "Discount",
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.green,
-                              ),
-                            ),
-                            Text(
-                              "-₹${discount.toStringAsFixed(2)}",
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                      const Divider(),
-
-                      // Total after discount
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Total:",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            "₹${total.toStringAsFixed(2)}",
-                            // ✅ final total after discount
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      // ✅ Checkout Button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                          ),
-                          onPressed: () {
-                            final cartState = context.read<CartBloc>().state;
-                            if (cartState is CartSuccessState &&
-                                cartState.cartItems!.isNotEmpty) {
-                              showConfirmOrderDialog(
-                                context,
-                                cartState.cartItems!,
-                              );
-                            }
-                          },
-
-                          child: const Text(
-                            "Checkout",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                      if (showCouponAnimation)
+                        Container(
+                          color: Colors.transparent, // optional semi-transparent overlay
+                          child: Center(
+                            child: Lottie.asset(
+                              'assets/lottie/coupon_applied.json', // put your Lottie file in assets
+                              width: 200,
+                              height: 200,
+                              repeat: false,
                             ),
                           ),
                         ),
-                      ),
+
                     ],
                   );
                 },
