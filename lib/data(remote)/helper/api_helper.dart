@@ -11,15 +11,14 @@ class ApiHelper {
   Future<dynamic> getApi({
     required String url,
     Map<String, String>? mHeaderParams,
-    bool isAuth = false,
   }) async {
-  if(!isAuth){
     mHeaderParams ??= {};
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString("token") ?? "";
-    mHeaderParams["Authorization"] = "Bearer $token";
-  }
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString("token") ?? "";
+      mHeaderParams["Authorization"] = "Bearer $token";
+
+
     try {
       var response = await http.get(Uri.parse(url), headers: mHeaderParams);
       return returnResponse(response);

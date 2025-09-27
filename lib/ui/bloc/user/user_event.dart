@@ -23,5 +23,3 @@ class LoginUserEvent extends UserEvent {
   LoginUserEvent({required this.email, required this.password});
 }
 
-//Fetch User Profile
-class FetchUserProfileEvent extends UserEvent{}
