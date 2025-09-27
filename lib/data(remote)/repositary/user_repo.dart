@@ -38,4 +38,17 @@ Future<dynamic> loginUser({required String email,required String password})async
     }
 }
 
+//Fetch User Profile
+  Future<dynamic> fetchUserProfile() async {
+    try {
+      return await apiHelper.getApi(
+        url: AppUrls.userUrl,
+        isAuth: true,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
 }

@@ -4,6 +4,9 @@ import 'package:e_commerce_app/domain(constants)/app_urls.dart';
 class CartRepo{
   ApiHelper apiHelper;
   CartRepo({required this.apiHelper});
+
+  //Add product into cart
+
   Future<dynamic> addProductIntoCart ({required int productId , required int qty})async{
     try{
       return await apiHelper.postApi(url: AppUrls.addToCartUrl,
@@ -13,6 +16,8 @@ class CartRepo{
     }
   }
 
+  //Fetch cart product
+
   Future<dynamic> fetchCartProduct()async{
     try{
       return await apiHelper.getApi(url: AppUrls.fetchCartUrl);
@@ -21,6 +26,7 @@ class CartRepo{
     }
   }
 
+  // decrement cart item
   Future<dynamic> incDecCartItem ({required int productId , required int qty})async{
     try{
       return await apiHelper.postApi(url: AppUrls.incDecCartUrl,
@@ -29,6 +35,8 @@ class CartRepo{
       rethrow;
     }
   }
+
+  //Delete cart item
 
   Future<dynamic> deleteCartItem({required int cartId})async{
     try{

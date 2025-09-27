@@ -70,6 +70,8 @@ class _HomePageState extends State<HomePage> {
               ),
 
               SizedBox(height: 20),
+
+              //SearchBar
               SearchBar(
                 padding: MaterialStatePropertyAll(
                   EdgeInsets.symmetric(horizontal: 10),
@@ -88,6 +90,7 @@ class _HomePageState extends State<HomePage> {
 
               SizedBox(height: 20),
 
+              //CarouselSlider with DotIndicator
               SizedBox(
                 height: 190,
                 child: Stack(
@@ -155,6 +158,7 @@ class _HomePageState extends State<HomePage> {
 
               SizedBox(height: 20),
 
+              //Category List
               SizedBox(
                 height: 115,
                 child: BlocBuilder<CategoryBloc,CategoryState>(
@@ -225,6 +229,7 @@ class _HomePageState extends State<HomePage> {
                 },)
               ),
 
+              //Special For You
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -253,6 +258,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
 
+          //Products GridView
           Container(
             margin: EdgeInsets.only(top: 10, bottom: 150),
             width: double.infinity,

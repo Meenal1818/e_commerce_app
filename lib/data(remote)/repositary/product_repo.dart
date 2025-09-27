@@ -8,6 +8,8 @@ class ProductRepo {
 
   ProductRepo({required this.apiHelper});
 
+  //Fetch Products
+
   Future<dynamic> fetchProducts({int? catId}) async {
     try {
       final Map<String,dynamic> body = catId != null ? {"category_id": catId} : {};

@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CartBloc extends Bloc<CartEvent,CartState>{
   CartRepo cartRepo;
   CartBloc({required this.cartRepo}) : super(CartInitialState()){
+
+    //Add to cart
     on<AddToCart>((event,emit)async{
       emit(CartLoadingState());
       try{
@@ -21,6 +23,7 @@ class CartBloc extends Bloc<CartEvent,CartState>{
       }
     });
 
+    //Fetch Cart
     on<FetchCart>((event,emit)async{
       emit(CartLoadingState());
 
@@ -38,6 +41,8 @@ class CartBloc extends Bloc<CartEvent,CartState>{
       }
     });
 
+
+    //Decrement Cart Item
     on<IncDecCartItem>((event, emit) async {
       emit(CartLoadingState());
       try {
@@ -62,6 +67,7 @@ class CartBloc extends Bloc<CartEvent,CartState>{
 
 
 
+    //Delete Cart Item
     on<DeleteCartItem>((event,emit)async{
       emit(CartInitialState());
 

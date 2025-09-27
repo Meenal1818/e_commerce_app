@@ -1,5 +1,6 @@
 abstract class UserEvent {}
 
+//Register
 class RegisterUserEvent extends UserEvent {
   String name;
   String email;
@@ -14,9 +15,13 @@ class RegisterUserEvent extends UserEvent {
   });
 }
 
+//Login
 class LoginUserEvent extends UserEvent {
   String email;
   String password;
 
   LoginUserEvent({required this.email, required this.password});
 }
+
+//Fetch User Profile
+class FetchUserProfileEvent extends UserEvent{}

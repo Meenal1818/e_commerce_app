@@ -52,6 +52,8 @@ class _DetailsPageState extends State<DetailsPage> {
                     child: Stack(
                       alignment: Alignment.bottomCenter,
                       children: [
+
+                        //Product Images
                         CarouselSlider.builder(
                           itemCount: 5,
                           itemBuilder: (_, index, __) {
@@ -80,6 +82,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                         ),
 
+                        //Back, share, like, Icons UI
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 15,
@@ -130,6 +133,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                         ),
 
+                        //Dot Indicator
                         Positioned(
                           bottom: 12,
                           child: DotsIndicator(
@@ -156,6 +160,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
                   ),
 
+                  //Product name, price, rating, seller name UI
                   Container(
                     width: double.infinity,
                     decoration: const BoxDecoration(
@@ -222,13 +227,16 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
 
                         SizedBox(height: 25,),
+
+                        //Colors UI
                         Text('Color',style: TextStyle(
                             color: Colors.black,fontSize: 22,fontWeight: FontWeight.bold
                         ),),
 
                         SizedBox(height: 10,),
+
                         SizedBox(
-                          height: 50, // outer height भी बढ़ा दो
+                          height: 50,
                           child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
@@ -248,11 +256,11 @@ class _DetailsPageState extends State<DetailsPage> {
                                     shape: BoxShape.circle,
                                     border: Border.all(
                                       color: mColors[index],
-                                      width: 2, // border मोटा दिखेगा
+                                      width: 2,
                                     ),
                                   ),
                                   child: Container(
-                                    margin: const EdgeInsets.all(3), // inner circle थोड़ा छोटा
+                                    margin: const EdgeInsets.all(3),
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: mColors[index],
@@ -274,6 +282,8 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
 
                         SizedBox(height: 25,),
+
+                        //PageView UI
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: List.generate(tabs.length, (index) {
@@ -397,6 +407,8 @@ class _DetailsPageState extends State<DetailsPage> {
             ),
           ),
 
+
+          //Bottom Container
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -412,6 +424,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 child: Row(
                   children: [
 
+                    //Quantity UI
                     Container(
                       width: 110,
                       height: 36,
@@ -451,7 +464,7 @@ class _DetailsPageState extends State<DetailsPage> {
 
                     Spacer(),
 
-
+                    //Add to cart button UI
                     SizedBox(
                       height: 60,
                       width: 200,

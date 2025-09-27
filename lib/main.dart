@@ -37,7 +37,7 @@ void main() {
               ),
         ),
         BlocProvider(create: (context) => CartBloc(cartRepo: CartRepo(apiHelper: ApiHelper())),),
-      BlocProvider(create: (context) => OrderBloc(orderRepo: OrderRepo(apiHelper: ApiHelper())),)
+      BlocProvider(create: (context) => OrderBloc(orderRepo: OrderRepo(apiHelper: ApiHelper())),),
 
       ],
       child: MyApp(),

@@ -4,6 +4,8 @@ import 'package:e_commerce_app/domain(constants)/app_urls.dart';
 class OrderRepo{
   ApiHelper apiHelper;
   OrderRepo({required this.apiHelper});
+
+  // Create order
   Future<dynamic> createOrder({required int productId,required int status})async{
     try{
      return await apiHelper.postApi(url: AppUrls.createOrderUrl,
@@ -13,7 +15,8 @@ class OrderRepo{
       rethrow;
     }
   }
-  
+
+  //Fetch order
   Future<dynamic> fetchOrders()async{
     try{
       return await apiHelper.getApi(url: AppUrls.getOrderUrl);

@@ -8,6 +8,8 @@ class CategoryBloc extends Bloc<CategoryEvent,CategoryState>{
   CategoryRepo categoryRepo;
 
   CategoryBloc({required this.categoryRepo}): super(CategoryInitialState()){
+
+    //Get All Category
     on<GetAllCategory>((event,emit)async{
       emit(CategoryLoadingState());
 

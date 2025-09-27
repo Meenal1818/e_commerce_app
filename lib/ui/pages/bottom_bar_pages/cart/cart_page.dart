@@ -43,6 +43,7 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.grey.shade200,
+
       appBar: AppBar(
         backgroundColor: Colors.grey.shade200,
         centerTitle: true,
@@ -76,6 +77,8 @@ class _CartPageState extends State<CartPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+
+            //Cart Items
             SizedBox(
               height: 420,
               width: double.infinity,
@@ -310,6 +313,8 @@ class _CartPageState extends State<CartPage> {
                 },
               ),
             ),
+
+            //Apply Coupon, Total, SubTotal
             Container(
               padding: const EdgeInsets.all(20),
               height: 350,
@@ -607,6 +612,8 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
+
+  //Order Place Dialog Box
   void showConfirmOrderDialog(BuildContext context, List<CartModel> cartItems) {
     showDialog(
       context: context,

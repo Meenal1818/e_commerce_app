@@ -8,6 +8,8 @@ class CategoryRepo {
 
   CategoryRepo({required this.apiHelper});
 
+  //fetch categories
+
   Future<dynamic> fetchCategories() async {
     try {
       return await apiHelper.getApi(url: AppUrls.fetchCategoryUrl);

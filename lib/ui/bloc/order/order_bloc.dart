@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class OrderBloc extends Bloc<OrderEvent,OrderState>{
   OrderRepo orderRepo;
   OrderBloc({required this.orderRepo}): super(OrderInitialState()){
+
+    //Create Order
     on<CreateOrder>((event,emit)async{
       emit(OrderLoadingState());
       try{
@@ -20,6 +22,8 @@ class OrderBloc extends Bloc<OrderEvent,OrderState>{
         emit(OrderFailureState(errMsg: e.toString()));
       }
     });
+
+    //Fetch Order
     on<FetchOrders>((event,emit)async{
       emit(OrderInitialState());
       try{

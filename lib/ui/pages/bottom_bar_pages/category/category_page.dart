@@ -52,6 +52,7 @@ class _CategoryPageState extends State<CategoryPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
+              //Category Name
               Row(
                 children: [
                   GestureDetector(
@@ -81,6 +82,8 @@ class _CategoryPageState extends State<CategoryPage> {
               ),
 
               const SizedBox(height: 15),
+
+              //Category Product Data
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 50),
                 width: double.infinity,

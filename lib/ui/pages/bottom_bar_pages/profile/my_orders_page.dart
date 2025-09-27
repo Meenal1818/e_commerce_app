@@ -53,6 +53,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
       body: Column(
         children: [
 
+          //Ordered Items UI
           Expanded(
             child: BlocBuilder<OrderBloc, OrderState>(
               builder: (context, state) {
@@ -175,7 +176,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
             ),
           ),
 
-          // Bottom Summary
+          // Bottom Summary(Total)
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(

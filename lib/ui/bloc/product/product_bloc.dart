@@ -9,6 +9,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ProductRepo productRepo;
 
   ProductBloc({required this.productRepo}) : super(ProductInitialState()) {
+
+    //Fetch Product
     on<FetchProductEvent>((event, emit) async {
       emit(ProductLoadingState());
 
