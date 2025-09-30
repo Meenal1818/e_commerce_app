@@ -28,20 +28,19 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-    ModalRoute.of(context)?.settings.arguments;
+    final args = ModalRoute.of(context)?.settings.arguments;
 
-    if (args is List &&args.length>=2){
-
-      catId = args[0]as int;
-      catName=args[1]as String;
-
+    if (args is List && args.length >= 2) {
+      catId = args[0] as int;
+      catName = args[1] as String;
       context.read<ProductBloc>().add(FetchProductEvent(catId));
-    }
-    else if (args is ProductModel) {
-      product =args;
+    } else if (args is ProductModel) {
+      product = args;
+      context.read<ProductBloc>().add(FetchProductEvent());
+    } else {
       context.read<ProductBloc>().add(FetchProductEvent());
     }
+
     String title=catName??'All Products';
     return Scaffold(
       backgroundColor: Colors.white,

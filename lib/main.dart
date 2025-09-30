@@ -8,6 +8,7 @@ import 'package:e_commerce_app/ui/bloc/cart/cart_bloc.dart';
 import 'package:e_commerce_app/ui/bloc/category/category_bloc.dart';
 import 'package:e_commerce_app/ui/bloc/order/order_bloc.dart';
 import 'package:e_commerce_app/ui/bloc/product/product_bloc.dart';
+import 'package:e_commerce_app/ui/bloc/profile/profile_bloc.dart';
 import 'package:e_commerce_app/ui/bloc/user/user_bloc.dart';
 import 'package:e_commerce_app/ui/pages/bottom_bar_pages/home/home_page.dart';
 import 'package:e_commerce_app/ui/pages/on_boarding_pages/splash_page.dart';
@@ -38,6 +39,7 @@ void main() {
         ),
         BlocProvider(create: (context) => CartBloc(cartRepo: CartRepo(apiHelper: ApiHelper())),),
       BlocProvider(create: (context) => OrderBloc(orderRepo: OrderRepo(apiHelper: ApiHelper())),),
+        BlocProvider(create: (context) => ProfileBloc(userRepo: UserRepo(apiHelper: ApiHelper())),)
 
       ],
       child: MyApp(),

@@ -2,6 +2,8 @@ import 'package:e_commerce_app/data(remote)/helper/api_helper.dart';
 import 'package:e_commerce_app/domain(constants)/app_urls.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/user_profile_model.dart';
+
 class UserRepo {
   ApiHelper apiHelper;
 
@@ -46,5 +48,13 @@ class UserRepo {
     }
   }
 
+  Future<UserProfileModel> fetchUserProfile() async {
+    try {
+      final response = await apiHelper.postApi(url: AppUrls.userUrl);
 
+      return UserProfileModel.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

@@ -1,8 +1,12 @@
 import 'package:e_commerce_app/domain(constants)/app_routes.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../bloc/profile/profile_bloc.dart';
+import '../../../bloc/profile/profile_event.dart';
+import '../../../bloc/profile/profile_state.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -12,88 +16,110 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProfileBloc>().add(FetchProfile());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
-        child: Column(
-          children: [
-            // Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Profile',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () {},
-                ),
-              ],
-            ),
+      body: BlocBuilder<ProfileBloc, ProfileState>(
+        builder: (context, state) {
+          if (state is ProfileLoadingState) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ProfileLoadedState) {
+            final user = state.userProfile.data!;
 
-            const SizedBox(height: 20),
-
-            // Profile picture
-            CircleAvatar(
-              radius: 65,
-              backgroundImage: NetworkImage('https://cdn-icons-png.flaticon.com/512/147/147144.png'),
-            ),
-            const SizedBox(height: 40),
-
-            // Profile details
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.orange.shade100,
-                borderRadius: BorderRadius.circular(16),
-              ),
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
               child: Column(
                 children: [
-                  ListTile(
-                    leading: const Icon(Icons.person),
-                    title: Text('N/A'),
+                  // Header
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Profile',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.settings),
+                        onPressed: () {},
+                      ),
+                    ],
                   ),
-                  Divider(color: Colors.white,thickness: 2,),
-                  ListTile(
-                    leading: const Icon(Icons.email),
-                    title: Text('N/A'),
+
+                  const SizedBox(height: 20),
+
+                  // Profile picture
+                  CircleAvatar(
+                    radius: 65,
+                    backgroundImage: (user.image != null &&
+                        user.image!.isNotEmpty)
+                        ? NetworkImage(user.image!)
+                        : const NetworkImage(
+                        'https://cdn-icons-png.flaticon.com/512/147/147144.png'),
                   ),
-                  Divider(color: Colors.white,thickness: 2,),
-                  ListTile(
-                    leading: const Icon(Icons.phone),
-                    title: Text('N/A'),
-                  ),
-                  Divider(color: Colors.white,thickness: 2,),
-                  ListTile(
-                    leading: const Icon(CupertinoIcons.cube_box_fill),
-                    title: const Text('My Orders'),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 25),
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.myOrders);
-                    },
-                  ),
-                  Divider(color: Colors.white,thickness: 2,),
-                  ListTile(
-                    leading: const Icon(Icons.logout),
-                    title: const Text('LogOut'),
-                    onTap: () {
-                      logout(context);
-                    },
+                  const SizedBox(height: 40),
+
+                  // Profile details
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.shade100,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: const Icon(Icons.person),
+                          title: Text(user.name ?? 'N/A'),
+                        ),
+                        Divider(color: Colors.white, thickness: 2),
+                        ListTile(
+                          leading: const Icon(Icons.email),
+                          title: Text(user.email ?? 'N/A'),
+                        ),
+                        Divider(color: Colors.white, thickness: 2),
+                        ListTile(
+                          leading: const Icon(Icons.phone),
+                          title: Text(user.mobileNumber ?? 'N/A'),
+                        ),
+                        Divider(color: Colors.white, thickness: 2),
+                        ListTile(
+                          leading: const Icon(CupertinoIcons.cube_box_fill),
+                          title: const Text('My Orders'),
+                          trailing:
+                          const Icon(Icons.arrow_forward_ios, size: 25),
+                          onTap: () {
+                            Navigator.pushNamed(context, AppRoutes.myOrders);
+                          },
+                        ),
+                        Divider(color: Colors.white, thickness: 2),
+                        ListTile(
+                          leading: const Icon(Icons.logout),
+                          title: const Text('LogOut'),
+                          onTap: () {
+                            logout(context);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
+            );
+          } else if (state is ProfileErrorState) {
+            return Center(child: Text("Error: ${state.message}"));
+          }
+          return const Center(child: Text("No profile data available"));
+        },
       ),
     );
   }
@@ -132,6 +158,4 @@ class _ProfilePageState extends State<ProfilePage> {
           context, AppRoutes.login, (Route<dynamic> route) => false);
     }
   }
-
-
 }

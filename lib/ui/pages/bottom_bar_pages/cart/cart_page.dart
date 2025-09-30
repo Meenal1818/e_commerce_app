@@ -94,7 +94,7 @@ class _CartPageState extends State<CartPage> {
                     // return Center(child: Text(state.errorMsg));
                     return Center(
                       child: Lottie.asset(
-                        'assets/lottie/empty_cart.json', // put your Lottie file in assets
+                        'assets/lottie/empty_cart.json',
                         width: 250,
                         height: 250,
                         repeat: false,
