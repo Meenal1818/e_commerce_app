@@ -94,10 +94,10 @@ class _CartPageState extends State<CartPage> {
                     // return Center(child: Text(state.errorMsg));
                     return Center(
                       child: Lottie.asset(
-                        'assets/lottie/empty_cart.json',
+                        'assets/lottie/empty (1).json',
                         width: 250,
                         height: 250,
-                        repeat: false,
+
                       ),
                     );
                   }
@@ -300,10 +300,9 @@ class _CartPageState extends State<CartPage> {
                       color: Colors.transparent, // optional semi-transparent overlay
                       child: Center(
                         child: Lottie.asset(
-                          'assets/lottie/empty_cart.json', // put your Lottie file in assets
+                          'assets/lottie/empty (1).json', // put your Lottie file in assets
                           width: 250,
                           height: 250,
-                          repeat: false,
                         ),
                       ),
                     );
@@ -593,7 +592,7 @@ class _CartPageState extends State<CartPage> {
                           color: Colors.transparent, // optional semi-transparent overlay
                           child: Center(
                             child: Lottie.asset(
-                              'assets/lottie/coupon_applied.json', // put your Lottie file in assets
+                              'assets/lottie/Order submit Check (1).json', // put your Lottie file in assets
                               width: 200,
                               height: 200,
                               repeat: false,
@@ -649,7 +648,10 @@ class _CartPageState extends State<CartPage> {
                 }
                 if (state is OrderSuccessState) {
                   Navigator.pop(dialogContext);
-                  Navigator.pop(context);
+                  if(Navigator.of(context).canPop()){
+                    Navigator.pop(context);
+                  }
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text("Order Placed Successfully!"),
