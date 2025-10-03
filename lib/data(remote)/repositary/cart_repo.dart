@@ -37,7 +37,6 @@ class CartRepo{
   }
 
   //Delete cart item
-
   Future<dynamic> deleteCartItem({required int cartId})async{
     try{
       return await apiHelper.postApi(url: AppUrls.deleteCartUrl,

@@ -194,6 +194,7 @@ class _CartPageState extends State<CartPage> {
                                             context.read<CartBloc>().add(
                                               DeleteCartItem(id: item.id),
                                             );
+
                                           },
                                           icon: const Icon(
                                             CupertinoIcons.delete,
@@ -202,42 +203,8 @@ class _CartPageState extends State<CartPage> {
                                           ),
                                         ),
 
-                                        Container(
-                                          width: 80,
-                                          height: 36,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey.shade200,
-                                            borderRadius: BorderRadius.circular(
-                                              50,
-                                            ),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Text(
-                                                'Items:',
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.grey,
-                                                ),
-                                              ),
-                                              // Quantity display
-                                              Text(
-                                                item.quantity.toString(),
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-
-                                            ],
-                                          ),
-
-                                        ),
                                         // Container(
-                                        //   width: 105,
+                                        //   width: 80,
                                         //   height: 36,
                                         //   decoration: BoxDecoration(
                                         //     color: Colors.grey.shade200,
@@ -246,21 +213,16 @@ class _CartPageState extends State<CartPage> {
                                         //     ),
                                         //   ),
                                         //   child: Row(
+                                        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                         //     children: [
-                                        //       // Decrement button
-                                        //       IconButton(
-                                        //         onPressed: () {
-                                        //            // quantity 1 se kam na ho
-                                        //             context.read<CartBloc>().add(
-                                        //               IncDecCartItem(
-                                        //                 productId: item.productId,
-                                        //                 qty: item.quantity - 1,
-                                        //               ),
-                                        //             );
-                                        //         },
-                                        //         icon: const Icon(Icons.remove, size: 20),
+                                        //       Text(
+                                        //         'Items:',
+                                        //         style: const TextStyle(
+                                        //           fontSize: 14,
+                                        //           fontWeight: FontWeight.bold,
+                                        //           color: Colors.grey,
+                                        //         ),
                                         //       ),
-                                        //
                                         //       // Quantity display
                                         //       Text(
                                         //         item.quantity.toString(),
@@ -271,23 +233,68 @@ class _CartPageState extends State<CartPage> {
                                         //         ),
                                         //       ),
                                         //
-                                        //       // Increment button
-                                        //       IconButton(
-                                        //         onPressed: () {
-                                        //           context.read<CartBloc>().add(
-                                        //             IncDecCartItem(
-                                        //               productId: item.productId,
-                                        //               qty: item.quantity + 1,
-                                        //             ),
-                                        //           );
-                                        //
-                                        //         },
-                                        //         icon: const Icon(Icons.add, size: 20),
-                                        //       ),
                                         //     ],
                                         //   ),
                                         //
                                         // ),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                                          height: 36,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade200,
+                                            borderRadius: BorderRadius.circular(50),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              // Decrement button
+                                              IconButton(
+                                                padding: EdgeInsets.zero,
+                                                constraints: const BoxConstraints(),
+                                                onPressed: () {
+                                                  if (item.quantity > 1) {
+                                                    context.read<CartBloc>().add(
+                                                      IncDecCartItem(
+                                                        productId: item.productId,
+                                                        qty: 1,
+                                                      ),
+                                                    );
+                                                  }
+                                                  setState(() {});
+                                                },
+                                                icon: const Icon(Icons.remove, size: 18),
+                                              ),
+
+                                              // Quantity display
+                                              Text(
+                                                item.quantity.toString(),
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+
+                                              // Increment button
+                                              IconButton(
+                                                padding: EdgeInsets.zero,
+                                                constraints: const BoxConstraints(),
+                                                onPressed: () {
+                                                  context.read<CartBloc>().add(
+                                                    IncDecCartItem(
+                                                      productId: item.productId,
+                                                      qty: -1,
+                                                    ),
+                                                  );
+                                                  setState(() {});
+                                                },
+                                                icon: const Icon(Icons.add, size: 18),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
                                       ],
                                     ),
                                   ],
@@ -589,10 +596,10 @@ class _CartPageState extends State<CartPage> {
 
                       if (showCouponAnimation)
                         Container(
-                          color: Colors.transparent, // optional semi-transparent overlay
+                          color: Colors.black26,
                           child: Center(
                             child: Lottie.asset(
-                              'assets/lottie/Order submit Check (1).json', // put your Lottie file in assets
+                              'assets/lottie/Order submit Check (1).json',
                               width: 200,
                               height: 200,
                               repeat: false,
